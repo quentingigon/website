@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 import re
 import logging
 import fnmatch
@@ -69,14 +68,15 @@ class RouteNode:
             return child.add_endpoint(child_route, noindex=noindex)
         else:
             if self.is_endpoint:
-                _logger.warn('Endpoint %s already exists' % self.get_path())
+                path = self.get_path()
+                _logger.warning(f"Endpoint {path} already exists")
             self.is_endpoint = True
             self.noindex = noindex
         return self
 
     def get_path(self):
         path = self.parent._get_path() if self.parent else "/"
-        path += "%s" % self.section
+        path += f"{self.section}"
         return path
 
     def _get_path(self):
@@ -84,7 +84,7 @@ class RouteNode:
         Return the path to access the current RouteNode.
         """
         path = self.parent._get_path() if self.parent else ""
-        path += "%s/" % self.section
+        path += f"{self.section}/"
         return path
 
     def get_robots(self):
@@ -98,7 +98,7 @@ class RouteNode:
         """
         robots = []
         if self.is_endpoint and self.noindex:
-            robots.append('Disallow: %s' % '/')
+            robots.append('Disallow: /')
         robots.extend(self._get_robots('/', branch_noindexed=self.noindex))
         return robots
 
@@ -114,9 +114,9 @@ class RouteNode:
         wildcard_endpoints = {}
 
         # Wildcard sections
-        wildcards = {k: v for k, v in self.children.iteritems() if '*' in k}
-        for section, node in wildcards.iteritems():
-            route = "%s%s" % (path, section)
+        wildcards = {k: v for k, v in self.children.items() if '*' in k}
+        for section, node in wildcards.items():
+            route = "{path}{section}"
             branch = branch_noindexed
             if node.is_endpoint:
                 access = ""
@@ -134,9 +134,9 @@ class RouteNode:
                                            branch_noindexed=branch))
 
         # Other sections
-        children = {k: v for k, v in self.children.iteritems() if '*' not in k}
-        for section, node in children.iteritems():
-            route = "%s%s" % (path, section)
+        children = {k: v for k, v in self.children.items() if '*' not in k}
+        for section, node in children.items():
+            route = "{path}{section}"
             branch = branch_noindexed
             if node.is_endpoint:
                 access = ""
@@ -144,7 +144,7 @@ class RouteNode:
                 # Check if one of the wildcards has an effect on the current
                 # section.
                 wild_node = None
-                for wild, n in wildcard_endpoints.iteritems():
+                for wild, n in wildcard_endpoints.items():
                     if fnmatch.fnmatch(section, wild):
                         wild_node = n
                         break
