@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 import logging
 
 from ..tools import noindex
@@ -17,7 +16,7 @@ class IrHttp(models.AbstractModel):
         Set the X-Robots-Tag header if the endpoint has the corresponding
         noindex parameter.
         """
-        response = super(IrHttp, cls)._dispatch()
+        response = super()._dispatch()
         if isinstance(response, Exception):
             return response
 
