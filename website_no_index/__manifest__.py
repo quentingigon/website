@@ -20,6 +20,7 @@
     'depends': [
         'website',
     ],
+    'installable': True,
     'data': [
         'views/robots.xml',
         'views/meta_tag.xml',
