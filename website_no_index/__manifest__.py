@@ -16,7 +16,7 @@
     'license': 'AGPL-3',
     'website': 'http://www.compassion.ch',
     'category': 'Website',
-    'version': '11.0.0.1.0',
+    'version': '12.0.0.1.0',
     'depends': [
         'website',
     ],
